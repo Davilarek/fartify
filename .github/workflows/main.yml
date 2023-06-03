@@ -1,0 +1,27 @@
+name: Make UserScript
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+jobs:
+  bundle-zip:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+    - run: node build.js
+    - name: Create release
+      run: | 
+        if ! gh release view build 2>/dev/null; then gh release create build; fi
+        gh release upload build --clobber Fartify.user.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Publish release
+      run: gh release edit build --title "Latest"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

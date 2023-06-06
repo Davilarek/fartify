@@ -6,7 +6,7 @@ template = template.replace("versionString", "0.1." + Date.now().toString().slic
 const splitTemplate = template.split("\n");
 for (let i = 0; i < splitTemplate.length; i++) {
     if (splitTemplate[i].includes("content;")) {
-        splitTemplate[i] = fs.readFileSync("./fartify.js", 'utf-8');
+        splitTemplate[i] = fs.readFileSync("./fartify.js", 'utf-8').split("\n").map(x => x == "" ? undefined : "  " + x).filter(x => x).join("\n");
     }
 }
 template = splitTemplate.join("\n");
